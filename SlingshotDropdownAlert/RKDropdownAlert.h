@@ -35,8 +35,8 @@
 extern NSString *const RKDropdownAlertDismissAllNotification;
 
 @protocol RKDropdownAlertDelegate <NSObject>
--(BOOL)dropdownAlertWasTapped:(RKDropdownAlert*)alert;
--(BOOL)dropdownAlertWasDismissed;
+@optional
+-(void)viewTapped;
 @end
 
 @interface RKDropdownAlert : UIButton

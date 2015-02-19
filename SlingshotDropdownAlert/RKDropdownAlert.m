@@ -72,12 +72,12 @@ NSString *DEFAULT_TITLE;
         messageLabel.textAlignment = NSTextAlignmentCenter;
         [self addSubview:messageLabel];
         
-        [self addTarget:self action:@selector(hideView:) forControlEvents:UIControlEventTouchUpInside];
+        [self addTarget:self action:@selector(viewWasTapped:) forControlEvents:UIControlEventTouchUpInside];
         
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(dismissAlertView)
-                                                     name:RKDropdownAlertDismissAllNotification
-                                                   object:nil];
+//        [[NSNotificationCenter defaultCenter] addObserver:self
+//                                                 selector:@selector(dismissAlertView)
+//                                                     name:RKDropdownAlertDismissAllNotification
+//                                                   object:nil];
         self.isShowing = NO;
 
     }
@@ -98,13 +98,9 @@ NSString *DEFAULT_TITLE;
 //%%% button method (what happens when you touch the drop down view)
 -(void)viewWasTapped:(UIButton *)alertView
 {
-    if (self.delegate) {
-        if ([self.delegate dropdownAlertWasTapped:self]) {
-            [self hideView:alertView];
-        }
-    } else {
-        [self hideView:alertView];
-    }
+    [self notifyDelegateTapped];
+
+    [self hideView:alertView];
 }
 
 -(void)hideView:(UIButton *)alertView
@@ -124,9 +120,6 @@ NSString *DEFAULT_TITLE;
     if (alertView){
         [alertView removeFromSuperview];
         self.isShowing = NO;
-        if (self.delegate){
-            [self.delegate dropdownAlertWasDismissed];
-        }
     }
 }
 
@@ -305,7 +298,7 @@ NSString *DEFAULT_TITLE;
         self.frame = frame;
     }];
     
-    [self performSelector:@selector(viewWasTapped:) withObject:self afterDelay:time+ANIMATION_TIME];
+    [self performSelector:@selector(hideView:) withObject:self afterDelay:time+ANIMATION_TIME];
 }
 
 
@@ -323,6 +316,13 @@ NSString *DEFAULT_TITLE;
     return YES;
 }
 
+- (void)notifyDelegateTapped
+{
+    __strong id<RKDropdownAlertDelegate> delegate = self.delegate;
+    if (delegate) {
+        [delegate viewTapped];
+    }
+}
 //
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
