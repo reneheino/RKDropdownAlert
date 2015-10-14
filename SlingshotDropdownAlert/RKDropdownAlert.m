@@ -74,10 +74,10 @@ NSString *DEFAULT_TITLE;
         
         [self addTarget:self action:@selector(viewWasTapped:) forControlEvents:UIControlEventTouchUpInside];
         
-//        [[NSNotificationCenter defaultCenter] addObserver:self
-//                                                 selector:@selector(dismissAlertView)
-//                                                     name:RKDropdownAlertDismissAllNotification
-//                                                   object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(dismissAlertView)
+                                                     name:RKDropdownAlertDismissAllNotification
+                                                   object:nil];
         self.isShowing = NO;
 
     }
